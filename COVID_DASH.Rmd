@@ -1,0 +1,396 @@
+---
+title: "COVID-19 Meta-Analysis of Comorbidities"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+    theme: yeti
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(metafor)
+#library(metaviz)
+library(googlesheets4)
+library(htmltools)
+  sheets_deauth()
+  
+  dat <- read_sheet("1m4cxVwr1D0MUWL2w_0UvdA19tSd1m5KYKKXnveZW-io")
+
+  measureType <- "PR"
+  
+  dat_fever <- escalc(
+    measure = measureType,
+    xi = symptomsFeverProp,
+    ni = Patients_Total,
+    data = dat
+  )
+  
+  dat_cough <- escalc(
+    measure = measureType,
+    xi = symptomsCoughProp,
+    ni = Patients_Total,
+    data = dat
+  )
+
+  dat_fatigue <- escalc(
+    measure = measureType,
+    xi = symptomsFatigueProp,
+    ni = Patients_Total,
+    data = dat
+  )    
+
+  dat_dyspnea <- escalc(
+    measure = measureType,
+    xi = symptomsDyspneaProp,
+    ni = Patients_Total,
+    data = dat
+  )
+
+  dat_hypertension <- escalc(
+    measure = measureType,
+    xi = symptomsHypertensionProp,
+    ni = Patients_Total,
+    data = dat
+  )
+  
+  dat_diabetes <- escalc(
+    measure = measureType,
+    xi = symptomsDiabetesProp,
+    ni = Patients_Total,
+    data = dat
+  )
+  
+  dat_rsd <- escalc(
+    measure = measureType,
+    xi = symptomsRespiratorySystemDiseaseProp,
+    ni = Patients_Total,
+    data = dat
+  )
+
+  dat_csd <- escalc(
+    measure = measureType,
+    xi = symptomsCardiovascularDiseaseProp,
+    ni = Patients_Total,
+    data = dat
+  )
+  
+  res.fever <- rma(yi,vi,slab = Study, data = dat_fever)
+  res.cough <- rma(yi,vi,slab = Study, data = dat_cough)
+  res.fatigue<- rma(yi,vi,slab = Study, data = dat_fatigue)
+  res.dyspnea <- rma(yi,vi,slab = Study, data = dat_dyspnea)
+  res.hypertension <- rma(yi,vi,slab = Study, data = dat_hypertension)
+  res.diabetes <- rma(yi,vi,slab = Study, data = dat_diabetes)
+  res.rsd <- rma(yi,vi,slab = Study, data = dat_rsd)
+  res.csd <- rma(yi,vi,slab = Study, data = dat_csd)
+  
+  #includeHTML("google-analytics.html")
+```
+
+
+
+Fever
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Forest Plot
+
+```{r}
+forest(res.fever)
+```
+
+### Funnel Plot
+
+```{r fig.height=5, fig.width=7}
+#funnel(res.fever)
+funnel(res.fever, level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Model Output
+
+```{r}
+res.fever
+```
+
+### Publication Bias
+
+```{r}
+ranktest(res.fever)
+
+regtest(res.fever)
+
+#includeHTML("google-analytics.html")
+```
+
+
+Cough
+=======================================================================
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Forest Plot
+
+```{r}
+forest(res.cough)
+```
+
+### Funnel Plot
+
+```{r fig.height=5, fig.width=7}
+#funnel(res.fever)
+funnel(res.cough, level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Model Output
+
+```{r}
+res.cough
+```
+
+### Publication Bias
+
+```{r}
+ranktest(res.cough)
+
+regtest(res.cough)
+
+```
+
+Fatigue
+=======================================================================
+  
+  Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Forest Plot
+  
+```{r}
+forest(res.fatigue)
+```
+
+### Funnel Plot
+
+```{r fig.height=5, fig.width=7}
+#funnel(res.fever)
+funnel(res.fatigue, level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Model Output
+  
+  ```{r}
+res.fatigue
+```
+
+### Publication Bias
+
+```{r}
+ranktest(res.fatigue)
+
+regtest(res.fatigue)
+
+```
+
+Dyspnea
+=======================================================================
+  
+  Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Forest Plot
+  
+```{r}
+forest(res.dyspnea)
+```
+
+### Funnel Plot
+
+```{r fig.height=5, fig.width=7}
+#funnel(res.fever)
+funnel(res.dyspnea, level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Model Output
+  
+```{r}
+res.dyspnea
+```
+
+### Publication Bias
+
+```{r}
+ranktest(res.dyspnea)
+
+regtest(res.dyspnea)
+
+```
+
+Hypertension
+=======================================================================
+  
+  Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Forest Plot
+  
+```{r}
+forest(res.hypertension)
+```
+
+### Funnel Plot
+
+```{r fig.height=5, fig.width=7}
+#funnel(res.fever)
+funnel(res.hypertension, level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Model Output
+  
+```{r}
+res.hypertension
+```
+
+### Publication Bias
+
+```{r}
+ranktest(res.hypertension)
+
+regtest(res.hypertension)
+
+```
+
+Diabetes
+=======================================================================
+  
+  Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Forest Plot
+  
+```{r}
+forest(res.diabetes)
+```
+
+### Funnel Plot
+
+```{r fig.height=5, fig.width=7}
+#funnel(res.fever)
+funnel(res.diabetes, level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Model Output
+
+```{r}
+res.diabetes
+```
+
+### Publication Bias
+
+```{r}
+ranktest(res.diabetes)
+
+regtest(res.diabetes)
+
+```
+
+Respiratory Disease
+=======================================================================
+  
+  Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Forest Plot
+  
+```{r}
+forest(res.rsd)
+```
+
+### Funnel Plot
+
+```{r fig.height=5, fig.width=7}
+#funnel(res.fever)
+funnel(res.rsd, level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Model Output
+  
+```{r}
+res.rsd
+```
+
+### Publication Bias
+
+```{r}
+ranktest(res.rsd)
+
+regtest(res.rsd)
+
+```
+
+Cardiovascular Disease
+=======================================================================
+  
+  Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Forest Plot
+  
+```{r}
+forest(res.csd)
+```
+
+### Funnel Plot
+
+```{r fig.height=5, fig.width=7}
+#funnel(res.fever)
+funnel(res.csd, level=c(90, 95, 99), shade=c("white", "gray55", "gray75"), legend=TRUE)
+```
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+  
+### Model Output
+  
+```{r}
+res.csd
+```
+
+### Publication Bias
+
+```{r}
+ranktest(res.csd)
+
+regtest(res.csd)
+
+```
+
+About
+=======================================================================
+This is a living meta-analysis based off the work of Jing Yang and collequges. 
+
+Yang, J., Zheng, Y., Gou, X., Pu, K., Chen, Z., Guo, Q., Ji, R., Wang, H., Wang, Y., & Zhou, Y. (2020). Prevalence of comorbidities in the novel Wuhan coronavirus (COVID-19) infection: a systematic review and meta-analysis. International Journal of Infectious Diseases. https://doi.org/10.1016/j.ijid.2020.03.017
